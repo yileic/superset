@@ -276,7 +276,6 @@ class BaseViz(object):
             payload = {
                 'cache_key': cache_key,
                 'cache_timeout': cache_timeout,
-                'column_formats': self.data['column_formats'],
                 'data': data,
                 'error': self.error_message,
                 'filter_endpoint': self.filter_endpoint,
@@ -317,11 +316,6 @@ class BaseViz(object):
             'token': self.token,
             'viz_name': self.viz_type,
             'filter_select_enabled': self.datasource.filter_select_enabled,
-            'column_formats': {
-                m.metric_name: m.d3format
-                for m in self.datasource.metrics
-                if m.d3format
-            },
         }
         return content
 

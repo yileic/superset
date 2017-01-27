@@ -21,19 +21,6 @@ export function applyDefaultFormData(
   return Object.assign(data, form_data);
 }
 
-// Control Panel fields that re-render chart without need for 'Query button'
-export function initialState(vizType = 'table', datasourceType = 'table') {
-  return {
-    dashboards: [],
-    isDatasourceMetaLoading: false,
-    datasources: null,
-    datasource_type: null,
-    filterColumnOpts: [],
-    fields,
-    isStarred: false,
-  };
-}
-
 export const autoQueryFields = [
   'datasource',
   'viz_type',

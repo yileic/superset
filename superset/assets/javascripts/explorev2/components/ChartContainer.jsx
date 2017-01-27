@@ -43,11 +43,11 @@ class ChartContainer extends React.PureComponent {
   }
 
   renderViz() {
-    console.log('rendering viz');
     const mockSlice = this.getMockedSliceObject();
     this.setState({ mockSlice });
+    visMap[this.props.viz_type](mockSlice, this.props.queryResponse);
     try {
-      visMap[this.props.viz_type](mockSlice, this.props.queryResponse);
+      //visMap[this.props.viz_type](mockSlice, this.props.queryResponse);
     } catch (e) {
       this.props.actions.chartRenderingFailed(e);
     }
@@ -239,20 +239,20 @@ ChartContainer.propTypes = propTypes;
 
 function mapStateToProps(state) {
   return {
-    containerId: `slice-container-${state.viz.form_data.slice_id}`,
-    slice_id: state.viz.form_data.slice_id,
-    slice_name: state.viz.form_data.slice_name,
-    viz_type: state.viz.form_data.viz_type,
-    form_data: state.viz.form_data,
+    containerId: `slice-container-${state.form_data.slice_id}`,
+    slice_id: state.form_data.slice_id,
+    slice_name: state.form_data.slice_name,
+    viz_type: state.form_data.viz_type,
+    form_data: state.form_data,
     can_download: state.can_download,
     chartUpdateStartTime: state.chartUpdateStartTime,
     chartUpdateEndTime: state.chartUpdateEndTime,
-    query: state.viz.query,
-    column_formats: state.viz.column_formats,
+    query: state.query,
+    column_formats: state.datasource ? state.datasource.column_formats : null,
     chartStatus: state.chartStatus,
     isStarred: state.isStarred,
     alert: state.chartAlert,
-    table_name: state.viz.form_data.datasource_name,
+    table_name: state.form_data.datasource_name,
     queryResponse: state.queryResponse,
     datasource_type: state.datasource_type,
   };

@@ -25,12 +25,17 @@ const defaultProps = {
   onChange: () => {},
 };
 
-export default class SelectField extends React.Component {
+export default class SelectField extends React.PureComponent {
   constructor(props) {
     super(props);
-    this.state = { options: this.getOptions() };
+    this.state = { options: this.getOptions(props) };
     this.onChange = this.onChange.bind(this);
     this.renderOption = this.renderOption.bind(this);
+  }
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.choices !== this.props.choices) {
+      this.setState({ options: this.getOptions(nextProps) });
+    }
   }
   onChange(opt) {
     let optionValue = opt ? opt.value : null;
@@ -40,8 +45,8 @@ export default class SelectField extends React.Component {
     }
     this.props.onChange(optionValue);
   }
-  getOptions() {
-    const options = this.props.choices.map((c) => {
+  getOptions(props) {
+    const options = props.choices.map((c) => {
       const label = c.length > 1 ? c[1] : c[0];
       const newOptions = {
         value: c[0],
@@ -50,19 +55,19 @@ export default class SelectField extends React.Component {
       if (c[2]) newOptions.imgSrc = c[2];
       return newOptions;
     });
-    if (this.props.freeForm) {
+    if (props.freeForm) {
       // For FreeFormSelect, insert value into options if not exist
-      const values = this.props.choices.map((c) => c[0]);
-      if (this.props.value) {
-        if (typeof this.props.value === 'object') {
-          this.props.value.forEach((v) => {
+      const values = props.choices.map((c) => c[0]);
+      if (props.value) {
+        if (typeof props.value === 'object') {
+          props.value.forEach((v) => {
             if (values.indexOf(v) === -1) {
               options.push({ value: v, label: v });
             }
           });
         } else {
-          if (values.indexOf(this.props.value) === -1) {
-            options.push({ value: this.props.value, label: this.props.value });
+          if (values.indexOf(props.value) === -1) {
+            options.push({ value: props.value, label: props.value });
           }
         }
       }
@@ -82,6 +87,10 @@ export default class SelectField extends React.Component {
   }
   render() {
     //  Tab, comma or Enter will trigger a new option created for FreeFormSelect
+    if (this.props.name === 'datasource') {
+      console.log(this.props.name, this.props.choices);
+      console.log(this.props.name, this.state.options);
+    }
     const selectProps = {
       multi: this.props.multi,
       name: `select-${this.props.name}`,
